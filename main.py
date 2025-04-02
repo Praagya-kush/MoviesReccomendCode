@@ -1,4 +1,5 @@
 import os
+import uvicorn
 from fastapi import FastAPI
 import movieRecommended  # Ensure this file exists
 
@@ -11,11 +12,9 @@ def home():
 @app.get("/recommend/{movie_name}")
 def recommend(movie_name: str):
     result = movieRecommended.get_movie_recommendations(movie_name)
-    if "error" in result:
-        return {"error": result["error"]}
     return {"recommended_movies": result["recommended_movies"]}
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))  # Railway provides a dynamic port
-    import uvicorn
+    port = int(os.getenv("PORT", 8000))  # Ensure Railway sets the port dynamically
+    print(f"Starting server on port {port}")  # Debugging
     uvicorn.run(app, host="0.0.0.0", port=port)
